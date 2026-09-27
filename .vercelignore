@@ -1,0 +1,12 @@
+.venv
+__pycache__
+*.pyc
+Training
+*.ipynb
+*.csv
+*.xls
+*.docx
+.env
+test_*.py
+demo_hybrid_analysis.py
+mode_demo.py

@@ -17,8 +17,8 @@ venv/
 .idea/
 
 # Data / artifacts
-models/*.joblib
-models/*.pkl
+# models/*.joblib and *.pkl are intentionally tracked (see below) so Vercel's
+# GitHub-integration deploy has the trained model available.
 *.log
 *.csv
 *.xlsx

@@ -20,7 +20,9 @@ app = Flask(__name__)
 
 # Initialize the predictor
 try:
-    predictor = PhishingPredictor(model_dir='models')
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    model_dir = os.path.join(app_dir, 'models')
+    predictor = PhishingPredictor(model_dir=model_dir)
     system_loaded = True
     model_available = predictor.model is not None
     hybrid_available = predictor.hybrid_analysis is not None
@@ -178,4 +180,4 @@ if __name__ == '__main__':
         print("=" * 60)
     
     print("🌐 Access the app at: http://localhost:5000")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True, use_reloader=False)

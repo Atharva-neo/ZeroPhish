@@ -11,6 +11,30 @@ This guide covers how to deploy the Phishing Detection System securely in differ
 
 ### Production Deployment
 
+#### Option 0: Vercel
+This repo now includes `vercel.json` and `api/index.py`, which exposes the existing Flask `app` as a
+Vercel Python serverless function (all routes are proxied to it — no code changes to `app.py` needed).
+
+1. **Model files must be deployable.** `.gitignore` currently excludes `models/*.joblib` and `models/*.pkl`,
+   so if you deploy via Vercel's GitHub integration (auto-deploy on push), the trained model will be
+   missing and the app will fall back to "no ML model" mode. Either:
+   - commit the trained model files (`models/best_model.joblib`, `models/scaler.joblib`,
+     `models/feature_names.joblib`, `models/threshold_legitimate_min_70.txt` — ~8.5MB total) by removing
+     the `models/*.joblib` / `models/*.pkl` lines from `.gitignore`, or
+   - deploy directly from your machine with the Vercel CLI (`vercel --prod`), which uploads the local
+     `models/` directory regardless of `.gitignore` (see `.vercelignore`, which does not exclude it).
+2. In the Vercel dashboard (or `vercel env add`), set:
+   - `HYBRID_ANALYSIS_API_KEY` — same value as your local `.env`, required for Hybrid Analysis mode.
+   - `FLASK_ENV=production`
+3. Deploy:
+   ```bash
+   npm i -g vercel   # once
+   vercel            # first run: links/creates the project, deploys a preview
+   vercel --prod     # deploys to your production domain
+   ```
+4. `Training/` (46MB of raw datasets/notebooks) and test scripts are excluded via `.vercelignore` — they
+   aren't needed at runtime.
+
 #### Option 1: Heroku
 ```bash
 # Set environment variables in Heroku
